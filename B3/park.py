@@ -39,9 +39,17 @@ def make_park(level,start_x,start_y,start_z,x_size,z_size):
             while swing_x==sand_x or swing_z==sand_z:
                 sand_x=rand.randint(0,width_area-1)
                 sand_z=rand.randint(0,depth_area-1)
+        if x_size*z_size>=300:
+            swing_x2=rand.randint(0,width_area-1)
+            swing_z2= rand.randint(0,depth_area-1)
+            while ((swing_x==sand_x or sand_x==swing_x2) or (swing_z==sand_z or sand_z==swing_z2)):
+                swing_x2=rand.randint(0,width_area-1)
+                swing_z2= rand.randint(0,depth_area-1)
         for i in range(5):
             for j in range(3):
                 park[swing_x*5+i+2][swing_z*3+j+2]=3#3 swing
+                if x_size*z_size>=300: 
+                    park[swing_x2*5+i+2][swing_z2*3+j+2]=3
                 if x_size*z_size>=100:
                     park[sand_x*5+i+2][sand_z*3+j+2]=4#4 sand
     """ else:
@@ -62,18 +70,10 @@ def make_park(level,start_x,start_y,start_z,x_size,z_size):
                 if x_size*z_size>=100:
                     park[sand_x*3+j+2][sand_z*5+i+2]=4#4 sand
  """
-    lightcount=0
-    lightlimit=x_size*z_size/200
-    if x_size*z_size<200:
-        lightlimit=1
-    for i in range(1,x_size-1):
-        for j in range(1,z_size-1):
-            if park[i][j]==0 and rand.random() <= 0.05:
-                park[i][j]=5#5 light
-                lightcount=1+lightcount
-            if lightcount >= lightlimit:
-                break
-
+    park[1][1]=5
+    park[1][-2]=5
+    park[-2][1]=5
+    park[-2][-2]=5
 
     swing_count=0        
     for i in range(x_size):
@@ -89,11 +89,9 @@ def make_park(level,start_x,start_y,start_z,x_size,z_size):
                 setBlock(level,start_x+i,start_y,start_z+j,12,0)
             elif park[i][j]==3:
                 setBlock(level,start_x+i,start_y,start_z+j,1,0)
-            if swing_count>=1:
-                continue
-            elif park[i][j]==3:
-                swing(level,start_x+i,start_y+1,start_z+j,direction)
-                swing_count=1+swing_count
+    swing(level,start_x+swing_x*5+2,start_y+1,start_z+swing_z*3+2,0)
+    if x_size*z_size>=300:
+        swing(level,start_x+swing_x2*5+2,start_y+1,start_z+swing_z2*3+2,0)
 
 def setlight(level,x,y,z):
     for i in range(1,6):

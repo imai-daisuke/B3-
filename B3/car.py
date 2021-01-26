@@ -5,7 +5,7 @@ import random
 
 def car(level,x,y,z,direction):
     car_depth=9
-    car_width=5
+    car_width=4
     material=random.randint(0,15)
     if direction==0:
         for i in range(x,x+car_width):
